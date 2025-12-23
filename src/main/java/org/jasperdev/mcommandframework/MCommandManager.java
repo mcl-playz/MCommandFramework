@@ -14,11 +14,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CommandManager implements CommandExecutor, TabCompleter {
+public class MCommandManager implements CommandExecutor, TabCompleter {
     private final JavaPlugin plugin;
     private final List<MCommand> commands;
 
-    public CommandManager(@Nonnull JavaPlugin plugin) {
+    public MCommandManager(@Nonnull JavaPlugin plugin) {
         this.plugin = plugin;
         this.commands = new ArrayList<>();
     }
