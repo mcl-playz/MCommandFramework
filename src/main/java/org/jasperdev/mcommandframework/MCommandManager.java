@@ -75,6 +75,9 @@ public class MCommandManager implements CommandExecutor, TabCompleter {
 
 			if(currentNode.getExecutor() != null){
 				MCommandContext context = new MCommandContext(sender, command, label, collectedArgs);
+				if(sender instanceof ConsoleCommandSender && !currentNode.canConsoleExecute()){
+					sender.sendMessage("§cConsole is not allowed to execute this command.");
+				}
 				currentNode.getExecutor().execute(context);
 			} else {
 				sender.sendMessage("§cIncomplete command usage.");

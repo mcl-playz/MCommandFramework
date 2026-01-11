@@ -38,7 +38,7 @@ public record MCommandContext(
 	 * @return Sender of the command OR 'player' argument
 	 */
 	@Nonnull
-	private Player getTargetOrSender(MCommandContext ctx) {
+	public Player getTarget(MCommandContext ctx) {
 		return ctx.getOptionalArg("player", Player.class)
 				.orElseGet(() -> (Player) ctx.sender());
 	}

@@ -14,6 +14,7 @@ public class MCmdNode {
 	private OptionData.OptionType type;
 	private OptionData optionData; // Added to store the original data (choices, etc.)
 	private MCmdExecutor executor;
+	private boolean allowConsoleExec = true;
 
 	private List<MCmdNode> children = new ArrayList<>();
 
@@ -103,6 +104,15 @@ public class MCmdNode {
 	public MCmdNode executes(MCmdExecutor executor) {
 		this.setExecutor(executor);
 		return this;
+	}
+
+	public MCmdNode allowConsole(boolean consoleExec){
+		this.allowConsoleExec = consoleExec;
+		return this;
+	}
+
+	public boolean canConsoleExecute(){
+		return this.allowConsoleExec;
 	}
 
 	@FunctionalInterface
