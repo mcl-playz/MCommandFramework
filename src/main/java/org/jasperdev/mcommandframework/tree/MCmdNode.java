@@ -14,7 +14,6 @@ public class MCmdNode {
 	private OptionData.OptionType type;
 	private OptionData optionData; // Added to store the original data (choices, etc.)
 	private MCmdExecutor executor;
-	private boolean allowConsoleExec = true;
 
 	private List<MCmdNode> children = new ArrayList<>();
 
@@ -53,7 +52,7 @@ public class MCmdNode {
 		return optionData;
 	}
 
-	public void addChild(@Nonnull MCmdNode node){
+	public MCmdNode addChild(@Nonnull MCmdNode node){
 		for(MCmdNode child : children){
 			if(child.getType() != null){
 				throw new IllegalStateException("Node already has an Option child. " +
@@ -70,6 +69,7 @@ public class MCmdNode {
 			}
 		}
 		this.children.add(node);
+		return this;
 	}
 
 	public List<MCmdNode> getChildren(){
@@ -94,25 +94,6 @@ public class MCmdNode {
 		if(executor != null){
 			executor.execute(context);
 		}
-	}
-
-	public MCmdNode then(MCmdNode child) {
-		this.addChild(child);
-		return this;
-	}
-
-	public MCmdNode executes(MCmdExecutor executor) {
-		this.setExecutor(executor);
-		return this;
-	}
-
-	public MCmdNode allowConsole(boolean consoleExec){
-		this.allowConsoleExec = consoleExec;
-		return this;
-	}
-
-	public boolean canConsoleExecute(){
-		return this.allowConsoleExec;
 	}
 
 	@FunctionalInterface
