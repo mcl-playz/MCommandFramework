@@ -39,7 +39,7 @@ public record MCommandContext(
 	 */
 	@Nonnull
 	public Player getTarget(MCommandContext ctx) {
-		return ctx.getOptionalArg("player", Player.class)
-				.orElseGet(() -> (Player) ctx.sender());
+			return ctx.getOptionalArg("player", Player.class)
+					.orElseGet(() -> (Player) ctx.sender());
 	}
 }

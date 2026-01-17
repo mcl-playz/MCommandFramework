@@ -2,6 +2,8 @@ package org.jasperdev.mcommandframework;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.*;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.SimplePluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jasperdev.mcommandframework.api.MCommand;
@@ -30,7 +32,7 @@ public class MCommandManager implements CommandExecutor, TabCompleter {
 		commandNodes.put(name, root);
 
 		try{
-			Constructor<PluginCommand> constructor = PluginCommand.class.getDeclaredConstructor(String.class, org.bukkit.plugin.Plugin.class);
+			Constructor<PluginCommand> constructor = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
 			constructor.setAccessible(true);
 
 			PluginCommand pluginCommand = constructor.newInstance(name, plugin);
@@ -118,9 +120,7 @@ public class MCommandManager implements CommandExecutor, TabCompleter {
 									: Stream.empty();
 						}
 						case PLAYER -> Bukkit.getOnlinePlayers().stream()
-								.map(org.bukkit.entity.Player::getName);
-
-						// For INTEGER, FLOAT, STRING, etc., return nothing
+								.map(Player::getName);
 						default -> Stream.empty();
 					};
 				})
@@ -150,15 +150,16 @@ public class MCommandManager implements CommandExecutor, TabCompleter {
 			return switch(type) {
 				case CHOICE -> {
 					List<String> allowed = (node.getOptionData() != null) ? node.getOptionData().getChoices() : null;
-					if(allowed == null || !allowed.contains(input.toLowerCase())){
-						throw new IllegalArgumentException("Invalid choice. Use: " + (allowed != null ? allowed : "[]"));
+					if(allowed == null || allowed.stream().noneMatch(s -> s.equalsIgnoreCase(input))){
+						throw new IllegalArgumentException("Invalid choice.");
 					}
 					yield input.toLowerCase();
 				}
 				case INTEGER -> Integer.parseInt(input);
+				case DOUBLE -> Double.parseDouble(input);
 				case FLOAT -> Float.parseFloat(input);
 				case PLAYER -> {
-					org.bukkit.entity.Player player = Bukkit.getPlayerExact(input);
+					Player player = Bukkit.getPlayerExact(input);
 					if(player == null) throw new IllegalArgumentException("Player '" + input + "' not found.");
 					yield player;
 				}

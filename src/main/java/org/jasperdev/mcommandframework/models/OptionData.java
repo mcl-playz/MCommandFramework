@@ -3,15 +3,18 @@ package org.jasperdev.mcommandframework.models;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class OptionData {
     protected String name;
     protected String description;
     protected OptionType type;
     protected List<String> choices;
+    protected Supplier<List<String>> dynamicChoices;
 
     public enum OptionType {
         INTEGER,
+		DOUBLE,
         FLOAT,
         STRING,
         PLAYER,
@@ -27,6 +30,11 @@ public class OptionData {
     public OptionData(@Nonnull String name, @Nonnull String description, @Nonnull List<String> choices) {
         this(name, description, OptionType.CHOICE);
         this.choices = choices;
+    }
+
+    public OptionData(@Nonnull String name, @Nonnull String description, @Nonnull Supplier<List<String>> dynamicChoices) {
+        this(name, description, OptionType.CHOICE);
+        this.dynamicChoices = dynamicChoices;
     }
 
     @Nonnull
@@ -64,6 +72,9 @@ public class OptionData {
 
     @Nullable
     public List<String> getChoices() {
+		if (dynamicChoices != null) {
+			return dynamicChoices.get();
+		}
         return choices;
     }
 }

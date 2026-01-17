@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MCmdNode {
-	private String name;
-	private String description;
-	private OptionData.OptionType type;
-	private OptionData optionData; // Added to store the original data (choices, etc.)
+	private final String name;
+	private final String description;
+	private final OptionData.OptionType type;
+	private OptionData optionData;
 	private MCmdExecutor executor;
 
-	private List<MCmdNode> children = new ArrayList<>();
+	private final List<MCmdNode> children = new ArrayList<>();
 
 	// Constructor for a Literal Subcommand
 	public MCmdNode(String name, String description){
